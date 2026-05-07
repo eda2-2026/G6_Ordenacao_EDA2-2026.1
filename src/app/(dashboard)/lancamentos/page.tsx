@@ -16,6 +16,9 @@ interface Filters {
   categoryId?: string;
   startDate?: string;
   endDate?: string;
+  sortBy?: "date" | "value";
+  sortOrder?: "asc" | "desc";
+  sortAlgo?: "quicksort" | "mergesort" | "radix";
 }
 
 export default function LancamentosPage() {
@@ -32,6 +35,9 @@ export default function LancamentosPage() {
     if (filters.categoryId) params.set("categoryId", filters.categoryId);
     if (filters.startDate) params.set("startDate", filters.startDate);
     if (filters.endDate) params.set("endDate", filters.endDate);
+    if (filters.sortBy) params.set("sortBy", filters.sortBy);
+    if (filters.sortOrder) params.set("sortOrder", filters.sortOrder);
+    if (filters.sortAlgo) params.set("sortAlgo", filters.sortAlgo);
 
     try {
       const res = await fetch(`/api/lancamentos?${params}`);

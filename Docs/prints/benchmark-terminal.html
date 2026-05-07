@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Benchmark - Ordenacao</title>
+    <style>
+      :root {
+        color-scheme: light;
+      }
+      body {
+        margin: 0;
+        background: #0b0f14;
+        font-family: "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        color: #e6edf3;
+      }
+      .wrap {
+        padding: 32px;
+      }
+      .terminal {
+        background: #111827;
+        border: 1px solid #243447;
+        border-radius: 12px;
+        padding: 20px 22px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      }
+      .title {
+        font-size: 14px;
+        color: #9fb3c8;
+        margin: 0 0 12px 0;
+      }
+      pre {
+        margin: 0;
+        white-space: pre-wrap;
+        line-height: 1.4;
+        font-size: 13px;
+      }
+      .legend {
+        margin-top: 14px;
+        font-size: 11px;
+        color: #7f93a8;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="terminal">
+        <p class="title">Konta - Benchmark de Ordenacao (mock)</p>
+        <pre>Sorting benchmark - lancamentos (mock data)
+
+Sorting benchmark (key=date, order=desc)
+size=1000
+  quicksort avg=6.37ms min=5.46ms
+  mergesort avg=5.06ms min=4.69ms
+  radix     avg=2.22ms min=1.39ms
+  winner=radix
+size=5000
+  quicksort avg=41.48ms min=39.78ms
+  mergesort avg=28.52ms min=27.54ms
+  radix     avg=8.17ms min=7.34ms
+  winner=radix
+size=10000
+  quicksort avg=110.93ms min=109.07ms
+  mergesort avg=63.08ms min=61.32ms
+  radix     avg=16.40ms min=15.90ms
+  winner=radix
+size=25000
+  quicksort avg=475.61ms min=470.29ms
+  mergesort avg=173.16ms min=172.11ms
+  radix     avg=45.31ms min=43.35ms
+  winner=radix
+
+Sorting benchmark (key=value, order=desc)
+size=1000
+  quicksort avg=1.20ms min=0.53ms
+  mergesort avg=1.01ms min=0.59ms
+  radix     avg=0.44ms min=0.40ms
+  winner=radix
+size=5000
+  quicksort avg=2.00ms min=1.50ms
+  mergesort avg=3.51ms min=2.94ms
+  radix     avg=1.87ms min=1.84ms
+  winner=radix
+size=10000
+  quicksort avg=3.15ms min=3.10ms
+  mergesort avg=6.89ms min=6.13ms
+  radix     avg=4.13ms min=3.84ms
+  winner=quicksort
+size=25000
+  quicksort avg=9.14ms min=8.99ms
+  mergesort avg=18.99ms min=18.07ms
+  radix     avg=13.58ms min=12.97ms
+  winner=quicksort</pre>
+        <div class="legend">Gerado em 07/05/2026</div>
+      </div>
+    </div>
+  </body>
+</html>

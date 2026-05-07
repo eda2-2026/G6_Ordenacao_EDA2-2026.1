@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireAuth, requireGroupMember, requireRole } from "@/lib/utils/permissions";
 import { lancamentoSchema } from "@/lib/validations/lancamento";
+import { sortTransactions, type SortAlgorithm, type SortKey, type SortOrder } from "@/lib/utils/sorting";
 import { z } from "zod";
 import type { Prisma } from "@prisma/client";
 
@@ -28,6 +29,16 @@ export async function GET(req: Request) {
     const startDate = searchParams.get("startDate");
     const endDate = searchParams.get("endDate");
     const userId = searchParams.get("userId");
+    const sortAlgoParam = searchParams.get("sortAlgo");
+    const sortByParam = searchParams.get("sortBy");
+    const sortOrderParam = searchParams.get("sortOrder");
+
+    const sortAlgo: SortAlgorithm | null =
+      sortAlgoParam === "quicksort" || sortAlgoParam === "mergesort" || sortAlgoParam === "radix"
+        ? sortAlgoParam
+        : null;
+    const sortBy: SortKey = sortByParam === "value" ? "value" : "date";
+    const sortOrder: SortOrder = sortOrderParam === "asc" ? "asc" : "desc";
 
     const where: Prisma.TransactionWhereInput = {
       groupId,
@@ -43,6 +54,36 @@ export async function GET(req: Request) {
           }
         : {}),
     };
+
+    if (sortAlgo) {
+      const transactions = await prisma.transaction.findMany({
+        where,
+        include: {
+          category: { select: { id: true, name: true, icon: true, color: true } },
+          user: { select: { id: true, name: true } },
+        },
+      });
+
+      const sorted = sortTransactions(transactions, {
+        algorithm: sortAlgo,
+        key: sortBy,
+        order: sortOrder,
+      });
+
+      const total = sorted.length;
+      const start = (page - 1) * perPage;
+      const data = sorted.slice(start, start + perPage);
+
+      return NextResponse.json({
+        data,
+        pagination: {
+          page,
+          perPage,
+          total,
+          totalPages: Math.ceil(total / perPage),
+        },
+      });
+    }
 
     const [transactions, total] = await Promise.all([
       prisma.transaction.findMany({

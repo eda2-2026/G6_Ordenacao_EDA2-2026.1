@@ -32,6 +32,99 @@ O Konta foi construído aplicando modernas metodologias do ecossistema JavaScrip
 
 ---
 
+## 📚 EDA2 — Ordenação de Lançamentos
+
+Para a disciplina de Estrutura de Dados 02, o módulo de **Lançamentos** recebeu uma camada de ordenação em memória, com comparação entre três algoritmos clássicos:
+
+- **Quicksort**
+- **Mergesort**
+- **Radix Sort** (para chaves numéricas)
+
+### Onde foi integrado
+
+- **API:** `GET /api/lancamentos` aceita os parâmetros `sortAlgo`, `sortBy` e `sortOrder`.
+- **UI:** o filtro de Lançamentos inclui seleção de **Algoritmo**, **Ordenar por** e **Ordem**.
+- **Modo padrão:** quando `sortAlgo` não é enviado, a ordenação continua no Postgres (mais eficiente para produção).
+
+Parâmetros suportados:
+
+- `sortAlgo`: `quicksort` | `mergesort` | `radix`
+- `sortBy`: `date` | `value`
+- `sortOrder`: `asc` | `desc`
+
+Exemplo:
+
+```bash
+GET /api/lancamentos?page=1&perPage=20&sortAlgo=radix&sortBy=value&sortOrder=desc
+```
+
+### Benchmark (mock)
+
+O benchmark roda localmente com dados mockados para comparar desempenho entre algoritmos.
+
+```bash
+npm install
+npm run sort:bench
+```
+
+### Evidências
+
+Print do terminal (benchmark):
+
+```text
+Sorting benchmark - lancamentos (mock data)
+
+Sorting benchmark (key=date, order=desc)
+size=1000
+   quicksort avg=6.37ms min=5.46ms
+   mergesort avg=5.06ms min=4.69ms
+   radix     avg=2.22ms min=1.39ms
+   winner=radix
+size=5000
+   quicksort avg=41.48ms min=39.78ms
+   mergesort avg=28.52ms min=27.54ms
+   radix     avg=8.17ms min=7.34ms
+   winner=radix
+size=10000
+   quicksort avg=110.93ms min=109.07ms
+   mergesort avg=63.08ms min=61.32ms
+   radix     avg=16.40ms min=15.90ms
+   winner=radix
+size=25000
+   quicksort avg=475.61ms min=470.29ms
+   mergesort avg=173.16ms min=172.11ms
+   radix     avg=45.31ms min=43.35ms
+   winner=radix
+
+Sorting benchmark (key=value, order=desc)
+size=1000
+   quicksort avg=1.20ms min=0.53ms
+   mergesort avg=1.01ms min=0.59ms
+   radix     avg=0.44ms min=0.40ms
+   winner=radix
+size=5000
+   quicksort avg=2.00ms min=1.50ms
+   mergesort avg=3.51ms min=2.94ms
+   radix     avg=1.87ms min=1.84ms
+   winner=radix
+size=10000
+   quicksort avg=3.15ms min=3.10ms
+   mergesort avg=6.89ms min=6.13ms
+   radix     avg=4.13ms min=3.84ms
+   winner=quicksort
+size=25000
+   quicksort avg=9.14ms min=8.99ms
+   mergesort avg=18.99ms min=18.07ms
+   radix     avg=13.58ms min=12.97ms
+   winner=quicksort
+```
+
+Print da UI (Lançamentos com algoritmo selecionado):
+
+- [Docs/prints/ordenacao-ui-placeholder.svg](Docs/prints/ordenacao-ui-placeholder.svg)
+
+---
+
 ## 🚀 Como iniciar com Docker
 
 O ambiente já está perfeitamente orquestrado com Docker. Não é necessário possuir nada instalado na máquina exceto o Docker Compose.

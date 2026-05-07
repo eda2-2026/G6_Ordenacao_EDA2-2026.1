@@ -18,6 +18,9 @@ interface FiltrosLancamentoProps {
     categoryId?: string;
     startDate?: string;
     endDate?: string;
+    sortBy?: "date" | "value";
+    sortOrder?: "asc" | "desc";
+    sortAlgo?: "quicksort" | "mergesort" | "radix";
   }) => void;
 }
 
@@ -26,6 +29,9 @@ export default function FiltrosLancamento({ onFilter }: FiltrosLancamentoProps) 
   const [categoryId, setCategoryId] = useState<string>("");
   const [startDate, setStartDate] = useState<string>("");
   const [endDate, setEndDate] = useState<string>("");
+  const [sortBy, setSortBy] = useState<"date" | "value">("date");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+  const [sortAlgo, setSortAlgo] = useState<"db" | "quicksort" | "mergesort" | "radix">("db");
   const [categories, setCategories] = useState<Category[]>([]);
 
   const fetchCategories = useCallback(async () => {
@@ -48,17 +54,23 @@ export default function FiltrosLancamento({ onFilter }: FiltrosLancamentoProps) 
       categoryId: categoryId || undefined,
       startDate: startDate || undefined,
       endDate: endDate || undefined,
+      sortBy: sortAlgo === "db" ? undefined : sortBy,
+      sortOrder: sortAlgo === "db" ? undefined : sortOrder,
+      sortAlgo: sortAlgo === "db" ? undefined : sortAlgo,
     });
-  }, [type, categoryId, startDate, endDate, onFilter]);
+  }, [type, categoryId, startDate, endDate, sortBy, sortOrder, sortAlgo, onFilter]);
 
   function clearFilters() {
     setType("");
     setCategoryId("");
     setStartDate("");
     setEndDate("");
+    setSortBy("date");
+    setSortOrder("desc");
+    setSortAlgo("db");
   }
 
-  const hasFilters = type || categoryId || startDate || endDate;
+  const hasFilters = type || categoryId || startDate || endDate || sortAlgo !== "db";
 
   return (
     <div className="flex flex-wrap items-end gap-3">
@@ -109,6 +121,47 @@ export default function FiltrosLancamento({ onFilter }: FiltrosLancamentoProps) 
           onChange={(e) => setEndDate(e.target.value)}
           className="w-[150px]"
         />
+      </div>
+
+      <div className="space-y-1">
+        <label className="text-xs text-muted-foreground">Ordenar por</label>
+        <Select value={sortBy} onValueChange={(v) => setSortBy(v as "date" | "value")}>
+          <SelectTrigger className="w-[150px]">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="date">Data</SelectItem>
+            <SelectItem value="value">Valor</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div className="space-y-1">
+        <label className="text-xs text-muted-foreground">Ordem</label>
+        <Select value={sortOrder} onValueChange={(v) => setSortOrder(v as "asc" | "desc")}>
+          <SelectTrigger className="w-[120px]">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="desc">Desc</SelectItem>
+            <SelectItem value="asc">Asc</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div className="space-y-1">
+        <label className="text-xs text-muted-foreground">Algoritmo</label>
+        <Select value={sortAlgo} onValueChange={(v) => setSortAlgo(v as "db" | "quicksort" | "mergesort" | "radix")}>
+          <SelectTrigger className="w-[170px]">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="db">Banco (padrao)</SelectItem>
+            <SelectItem value="quicksort">Quicksort</SelectItem>
+            <SelectItem value="mergesort">Mergesort</SelectItem>
+            <SelectItem value="radix">Radix</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
       {hasFilters && (

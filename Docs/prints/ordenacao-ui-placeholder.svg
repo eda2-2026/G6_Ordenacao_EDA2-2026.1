@@ -1,0 +1,8 @@
+<svg width="960" height="540" viewBox="0 0 960 540" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="12" y="12" width="936" height="516" rx="18" fill="#F5F5F5" stroke="#C9C9C9" stroke-width="2"/>
+  <rect x="60" y="70" width="840" height="60" rx="10" fill="#E6E6E6"/>
+  <rect x="60" y="150" width="840" height="260" rx="10" fill="#FFFFFF" stroke="#E0E0E0"/>
+  <text x="80" y="108" font-family="Arial, sans-serif" font-size="22" fill="#333333">Substitua este arquivo pelo print da tela de lancamentos com ordenacao ativa</text>
+  <text x="80" y="205" font-family="Arial, sans-serif" font-size="18" fill="#666666">Sugestao: selecione Algoritmo = Radix e Ordenar por = Valor</text>
+  <text x="80" y="240" font-family="Arial, sans-serif" font-size="16" fill="#999999">Depois, tire o print e salve com o mesmo nome do arquivo</text>
+</svg>
