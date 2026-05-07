@@ -1,0 +1,37 @@
+
+services:
+  db:
+    image: postgres:16-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: KONTA
+      POSTGRES_PASSWORD: KONTA_secret
+      POSTGRES_DB: KONTA_db
+    ports:
+      - "5434:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U KONTA -d KONTA_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "3001:3000"
+    environment:
+      DATABASE_URL: postgresql://KONTA:KONTA_secret@db:5432/KONTA_db
+      NEXTAUTH_URL: http://localhost:3001
+      NEXTAUTH_SECRET: konta_dev_secret_change_in_production_2026
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
